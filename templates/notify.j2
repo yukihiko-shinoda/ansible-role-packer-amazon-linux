@@ -1,0 +1,13 @@
+#!/bin/bash -eu
+if [ ! -t 0 ]; then
+  set +e
+  tee /tmp/standardInput.txt
+  standardInput=$(cat /tmp/standardInput.txt)
+  text="Finished!\n\`\`\`\n${standardInput}\n\`\`\`"
+  rm -f /tmp/standardInput.txt
+  set -e
+else
+  text='Finished!'
+fi
+curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"${text}\"}" ${SLACK_WEBHOOK_URL}
+echo ''

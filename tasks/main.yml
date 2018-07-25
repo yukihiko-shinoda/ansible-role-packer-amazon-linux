@@ -1,0 +1,25 @@
+---
+- name: install unzip
+  yum:
+    name: unzip
+
+- name: install pakcer
+  unarchive:
+    src: https://releases.hashicorp.com/packer/1.2.5/packer_1.2.5_linux_amd64.zip
+    # Installation directory: @see http://www.itmedia.co.jp/help/howto/linux/0007master/14/04.html
+    dest: /usr/local/bin/
+    remote_src: yes
+    creates: /usr/local/bin/packer
+
+- name: remove symbolic link for cracklib-packer
+  file:
+    path: /usr/sbin/packer
+    state: absent
+
+- name: set slack notification script
+  template:
+    src: notify.j2
+    dest: /usr/local/bin/notify
+    owner: root
+    group: root
+    mode: 0755
